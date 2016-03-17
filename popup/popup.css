@@ -1,0 +1,164 @@
+.container {
+  background-color: #E9F1F4;
+  border-color: #D8DEE2 #D8DEE2;
+  border-radius: 5px 5px 5px 5px;
+  border-style: solid;
+  border-width: 1px 1px 1px;
+  padding: 10px 10px 10px 10px;
+}
+
+.session_text{
+}
+
+
+.content_list {
+    list-style-type: none;
+    padding: 5px;
+    margin: 0px;
+}
+
+.Content_Area {
+  display: none !important;
+}
+
+li{
+  padding: 3px;
+}
+
+body {
+    min-width:300px;
+}
+
+#circle {
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px; 
+    background-color: #FF0000;
+    float:left;
+    margin:5px;
+}
+
+/** CSS FOR DOWNLOAD BUTTON */
+.center {
+  width: 20%;
+  margin: 0 auto;
+}
+
+.dloadimg {
+  display:block;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+}
+
+/** download button effect **/
+a.dlbtn {
+  display: inline-block;
+  position: relative;
+  height: 45px;
+  line-height: 40px;
+  overflow: hidden;
+  padding: 0 30px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #464646;
+  background-color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  border: 3px solid #ddd;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  transition: all 0.4s;
+}
+
+a.dlbtn:hover, a.dlbtn:focus {
+  color: #fff;
+  padding-right: 90px;
+  background-color: #5381bf;
+  border-color: #5381bf;
+}
+
+
+a.dlbtn .details {
+  position: absolute;
+  line-height: 11px;
+  top: 4px;
+  right: -15px;
+  opacity: 0;
+  background: #49668c;
+  color: #fff;
+  text-align: center;
+  padding: 3px 4px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-transition: right 0.4s linear, opacity 0.25s;
+  -moz-transition: right 0.4s linear, opacity 0.25s;
+  transition: right 0.4s linear, opacity 0.25s;
+}
+a.dlbtn .details .size {
+  display: block;
+  padding-top: 3px;
+}
+
+/*a.dlbtn:hover .details, a.dlbtn:focus .details {
+  right: 8px;
+  opacity: 1;
+}*/
+
+a.dlbtn:hover .details{
+  right: 8px;
+  opacity: 1;
+}
+
+/** CSS FOR SWITCH*/
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 10px;
+    background-color: #34A7C1; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 56px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}

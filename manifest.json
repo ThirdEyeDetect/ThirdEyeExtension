@@ -1,0 +1,47 @@
+{
+  "name": "ThirdEye",
+  "version": "0.6.1",
+  "manifest_version": 2,
+  "description": "Keeping you away from Physical Insiders",
+
+  "browser_action": {
+        "default_icon": "images/icon.png",
+        "default_popup": "popup/popup.html"
+    },
+
+  "content_scripts": [
+    {
+      "matches": ["https://www.facebook.com/*"],
+      "js": ["lib/jquery-2.2.0.js", 
+             "lib/common-functions.js",
+             "lib/jquery.appear.js",
+             "contentscript/global-variables.js",
+             "contentscript/session-contentscript.js", 
+             "contentscript/silent-detection-script.js", 
+             "contentscript/nonsilent-detection-script.js"]
+    }
+  ],
+
+  "background": {
+        "scripts": ["lib/jquery-2.2.0.js",
+                    "lib/crypto/rollups/aes.js",
+                    "lib/crypto/rollups/sha3.js",
+                    "lib/anonymize.js",
+                    "lib/common-functions.js", 
+                    "background/stats.js",
+                    "background/background.js"],
+        "persistent" : true
+    },
+
+  "permissions": [
+          "http://knock.nss.cs.ubc.ca/",
+          "tabs",
+          "storage",
+          "unlimitedStorage"
+        ],
+
+  "web_accessible_resources": ["background.js"]
+
+
+
+}
