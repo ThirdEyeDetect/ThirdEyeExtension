@@ -8,8 +8,12 @@ var facebookURL = "https://www.facebook.com/";
 var sessionKey = "none";
 var tabsOpened = 0;
 var clientKey = "";
+var clientID = "";
 var flushFunctionId = 0;
-var anonButtonStatus = false;
+var anonButtonStatus = true;
+
+var emailSendFunctionId = 0;
+var email = "-Not Set Yet-";
 
 /* Temporary Container Variables */
 var temporaryEventHolder = [];
@@ -18,15 +22,30 @@ var temporaryLog = "";
 /*
   When Extension is activated (for the first time)
   Load popup.js
-  Generate client key
+  Generate client key and client ID
 */
 $(document).ready(function() {
-  //$.getScript("popup.js", function(){});
-  var get_Callback = function(return_value){ 
+  var get_clientKey_Callback = function(return_value){ 
     clientKey = isEmpty(return_value) ? randomString(16) : return_value['clientKey'];
     chrome.storage.sync.set({'clientKey': clientKey});
   };
-  chrome.storage.sync.get('clientKey', get_Callback);
+  chrome.storage.sync.get('clientKey', get_clientKey_Callback);
+  
+  var get_clientID_Callback = function(return_value){ 
+    clientID = isEmpty(return_value) ? guid() : return_value['clientID'];
+    chrome.storage.sync.set({'clientID': clientID});
+    chrome.runtime.setUninstallURL("http://knock.nss.cs.ubc.ca:5000/uninstall?id="+clientID);
+  };
+  chrome.storage.sync.get('clientID', get_clientID_Callback);
+  
+  var get_installed_Callback = function(return_value){
+    if(isEmpty(return_value)){
+      chrome.tabs.create({ url: "../optionpage/options.html" });
+      chrome.storage.sync.set({'installed': "TRUE"});
+    }
+  };
+  chrome.storage.sync.get('installed', get_installed_Callback);
+  
   //console.log("Client Key is " + clientKey);
 });
 
@@ -36,7 +55,7 @@ Main Logging Function Listens to Messages from Various origins and performs acti
 */
 chrome.extension.onMessage.addListener(function(request, sender){
   var incomingMessage = JSON.parse(request.message);
-  //console.log(incomingMessage);
+  console.log(incomingMessage);
   
   if(!isMyMessage(incomingMessage,"background")){return;}
  
@@ -49,9 +68,22 @@ chrome.extension.onMessage.addListener(function(request, sender){
     }
     else if (incomingMessage['Action']=="AnonButton"){
       anonButtonStatus = incomingMessage['Status'];
-      console.log(incomingMessage['Status'])
+      console.log(incomingMessage['Status']);
     }
-    
+    return;
+  }
+  
+  /*This message was sent by Install Tab*/
+  if(endsWith(sender.url,"options.html") || endsWith(sender.url,"options.html?")){
+    if(incomingMessage['Action']=="RequestUIUpdate"){
+      var update_Object = {"ClientID": clientID, "Email": email, "Recepient": "installtab"}; 
+      chrome.extension.sendMessage({message: JSON.stringify(update_Object)});
+    }
+    else if (incomingMessage['Action']=="EmailUpdate"){
+      email = incomingMessage['Email'];
+      console.log(incomingMessage['Email']);
+      emailSendFunctionId = setInterval(SendEmailToServer,1000*5);
+    }
     return;
   }
   
@@ -131,11 +163,26 @@ function FlushToNetworkAndLog(){
   xhttp.open("POST", "http://knock.nss.cs.ubc.ca:5000/submit", true);
   xhttp.setRequestHeader("Content-type", "application/json");
   var sendVar = {
-    'ClientKey' : clientKey,
+    'ClientID' : clientID,
     'Events' : temporaryEventHolder
   };
   xhttp.send(JSON.stringify(sendVar));
 }
+
+function SendEmailToServer(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+  if (xhttp.readyState == 4 && xhttp.status == 200) {clearInterval(emailSendFunctionId);}};
+  xhttp.open("POST", "http://knock.nss.cs.ubc.ca:5000/email", true);
+  xhttp.setRequestHeader("Content-type", "application/json");
+  var sendVar = {
+    'ClientID' : clientID,
+    'Email' : email
+  };
+  xhttp.send(JSON.stringify(sendVar));
+  console.log("Sent Email");
+}
+
 
 /*
     FIlE IO FUCNTIONS

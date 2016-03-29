@@ -2,13 +2,16 @@
   "name": "ThirdEye",
   "version": "0.6.1",
   "manifest_version": 2,
-  "description": "Keeping you away from Physical Insiders",
+  "description": "Physical Insiders, Beware!",
 
   "browser_action": {
         "default_icon": "images/icon.png",
         "default_popup": "popup/popup.html"
     },
+    
 
+  "options_page": "optionpage/options.html",
+  
   "content_scripts": [
     {
       "matches": ["https://www.facebook.com/*"],

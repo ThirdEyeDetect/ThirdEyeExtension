@@ -1,44 +1,67 @@
 <html>
-    <head>
-        <script src="../lib/jquery-2.2.0.js"></script>
-        <script src="../lib/common-functions.js"></script>
-        <script src="../lib/crypto/rollups/aes.js"></script>
-        <script src="../lib/crypto/rollups/sha3.js"></script>
-        <script src="../lib/anonymize.js"></script>
-        <script src="popup.js"></script>
-        <link rel="stylesheet" type="text/css" href="popup.css"/>
-    </head>
-    <body>
-        <center>
-            <div>
-                <h3>Knock Knock</h3>
-            </div>
-        <div class="container">
-            <div>
-                <div id="circle"></div>
-                <div id="session_text"> Session is Not Active</div>
-            </div>
-              <div>
-                <h5> Anonymize your Log</h5>
-                <div class="onoffswitch">
-                  <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="anon" />
-                  <label class="onoffswitch-label" for="anon">
-                    <span class="onoffswitch-inner"></span>
-                    <span class="onoffswitch-switch"></span>
-                  </label>
-                </div>
-              </div>
-              <div>
-                 <h5> </h5>
-                <div class="dloadbuttondiv">
-                  <a id="dloadbutton" class="dlbtn">Download Log<span class="details">
-                    <span class="dlicon">
-                      <img class="dloadimg" src="../images/logicon.png"/>
-                    </span>
-                  </a>
-                </div
-              </div>
-            </center>
+  <head>
+      <!-- Scripts for popup -->
+      <script src="../lib/jquery-2.2.0.js"></script>
+      <script src="../lib/common-functions.js"></script>
+      <script src="../lib/crypto/rollups/aes.js"></script>
+      <script src="../lib/crypto/rollups/sha3.js"></script>
+      <script src="../lib/anonymize.js"></script>
+      <script src="popup.js"></script>
+      
+      <link rel="stylesheet" type="text/css" href="popup.css"/>
+  </head>
+  <body>
+    <div style="display:inline;">
+      <center>
+         <img src="../images/third_eye.gif" style="max-height:80px;"/>
+      </center> 
+      
+    </div>
+    <!-- Container -->
+    <div class="container">
+      <!-- Status -->
+      <div class="status">
+        <div id="circle"></div>
+        <div id="session_text"> Session is Not Active</div>
+      </div>
+      <!-- Options --> 
+      <div>
+        <div class="wrap">	
+          <button class="clicker" id="options">Options</button>
+          <div class="circle angled"></div>
         </div>
-    </body>
-</html>
+      </div>
+      <!-- Anonymization Switch -->
+      <div>
+        <center>
+        <h5> Anonymize your Log</h5>
+        <div class="onoffswitch">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="anon" />
+          <label class="onoffswitch-label" for="anon">
+            <span class="onoffswitch-inner"></span>
+            <span class="onoffswitch-switch"></span>
+          </label>
+        </div>
+        </center>
+      </div>
+      <!-- Download Button -->
+      <div>
+        <center>
+        <h5> </h5>
+        <div class="dloadbuttondiv">
+          <a id="dloadbutton" class="dlbtn">Download Log<span class="details">
+            <span class="dlicon">
+              <img class="dloadimg" src="../images/logicon.png"/>
+            </span>
+          </a>
+        </div>
+        </center>
+      </div>
+    </div>
+  </body>
+</html> 
+
+
+
+
+

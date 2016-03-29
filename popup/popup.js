@@ -7,6 +7,7 @@ var clientKey;
 var currentSwitchState;
 var anonSwitch;
 var downloadLogButton;
+var optionsButton;
 
 var firstTime = true;
 /**
@@ -25,8 +26,10 @@ $(document).ready(function() {
     sessionText = document.getElementById("session_text");
     anonSwitch = document.getElementById("anon");
     downloadLogButton = document.getElementById("dloadbutton");
+    optionsButton = document.getElementById("options");
     anonSwitch.onclick = toggleSwitch;
     downloadLogButton.onclick = downloadLog;
+    optionsButton.onclick = optionsClick;
 });
 
 function resetUI(){
@@ -43,6 +46,7 @@ chrome.runtime.onMessage.addListener(
  function(request, sender) {
     var messageReceived = JSON.parse(request.message);
     if(!isMyMessage(messageReceived,"popup")){return;}
+    console.log(messageReceived);
     clientKey=messageReceived['ClientKey'];
     currentSwitchState=messageReceived['AnonButton'];
     if(currentSwitchState){
@@ -57,13 +61,17 @@ chrome.runtime.onMessage.addListener(
     } 
 });
 
+/** Options Button */
+function optionsClick(){
+  chrome.tabs.create({ url: "../optionpage/options.html" });
+}
+
 /** Download Log Buttons */
 
 function downloadLog(){
   try{PrepareReadAndDownload();}
   catch(err){}
 }
-
 
 /* This Method Toggles The Switch */
 function toggleSwitch(){

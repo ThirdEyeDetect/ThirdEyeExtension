@@ -4,10 +4,14 @@
   border-radius: 5px 5px 5px 5px;
   border-style: solid;
   border-width: 1px 1px 1px;
-  padding: 10px 10px 10px 10px;
+  padding: 15px 15px 15px 15px;
 }
 
-.session_text{
+.status{
+  margin: 5px 5px 5px 5px; 
+  padding: 5px 5px 5px 5px; 
+  display: inline-flex;
+  align-items: center;
 }
 
 
@@ -39,6 +43,100 @@ body {
     float:left;
     margin:5px;
 }
+
+/** CSS FOR OPTIONS **/
+
+.wrap{  
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 20px auto 30px auto;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.clicker{
+  background-color: white;
+  outline: none;  
+  font-weight: 600;
+	  position:absolute;
+  cursor: pointer;
+  padding: 0;
+	  border: none;
+	  height: 64px;
+	  width: 64px;
+  left: 8px;
+  top: 8px;
+	  border-radius: 100px;
+	  z-index: 2;
+}
+
+.clicker:active{
+	  transform: translate(0, 1px);
+  height: 63px;
+	  box-shadow: 0px 1px 0 0 rgb(190,190,190) inset;
+}
+
+.circle{
+	  position: relative;
+  border-radius:40px;
+	  width: 80px;
+	  height: 80px;
+	  z-index: 1;
+}
+
+.circle.third{
+  border-radius: 0;
+}
+
+.clicker.faster:hover + .circle, .clicker.faster:active + .circle {
+	  animation: rotator linear .4s infinite;
+}
+
+.clicker.fast:hover + .circle, .clicker.fast:active + .circle {
+	  animation: rotator linear .5s infinite;
+}
+
+.clicker:hover + .circle, .clicker:active + .circle {
+	  animation: rotator linear .8s infinite;
+}
+
+@keyframes rotator{
+	  from{ transform: rotate(0deg); }
+	  to{ transform: rotate(360deg); }
+}
+
+		
+.angled {
+			background-image: linear-gradient(45deg, 
+                white 0%,
+                white 30%,
+                rgb(20,190,235) 30%,
+								rgb(20,190,235) 70%, 
+                white 70%, 
+                white 100%);
+		}
+
+.angled.second{
+  			background-image: linear-gradient( 
+                white 0%,
+                white 30%,
+                rgb(250,160,120) 30%,
+								rgb(250,160,120) 70%, 
+                white 70%, 
+                white 100%);
+}
+
+.angled.third{
+			background-image: linear-gradient(45deg, 
+                white 0%,
+                white 30%,
+                rgb(130,230,135) 30%,
+								rgb(130,230,135) 70%, 
+                white 70%, 
+                white 100%);
+}
+
 
 /** CSS FOR DOWNLOAD BUTTON */
 .center {
