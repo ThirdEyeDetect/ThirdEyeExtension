@@ -14,7 +14,7 @@ ThirdEye uses the Chrome API and thus, **Google Chrome** is the only supported b
 - Select the main folder (KnockKnock-master) and press **Okay**.
 - The extension should now have been added to Chrome and the options page will open automatically.
 - Enter your email in the form to create a secondary notification channel. Close the options page.
-ALERT! Ensure that you fill this information out. If you do not, Third Eye will have no way of informing you of anomalous activity.
+ALERT! Ensure that you fill this information out. If you do not, ThirdEye will have no way of informing you of anomalous activity.
 - You should receive an email by ThirdEye for a sucessful installation.
 - Third Eye extension is now active and listening for active Facebook tabs. It will automatically record actions performed on Facebook.
 
