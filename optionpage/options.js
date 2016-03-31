@@ -55,7 +55,3 @@ function formSubmit(){
     alert("Email did not match");
   }
 }
-
-window.onbeforeunload = function(e) {
-  return 'If you do not set an email, you will not be notified of anomalous Facebook behaviour';
-};

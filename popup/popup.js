@@ -34,7 +34,7 @@ $(document).ready(function() {
 
 function resetUI(){
   sessionStatus.style.backgroundColor = "#FF0000";
-  sessionText.innerHTML = "Session in Not Active";
+  sessionText.innerHTML = "No Active Facebook Session Detected";
 }
 
 /**
@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(
       anonSwitch.onclick = toggleVar;
     }
     if(messageReceived['Status']){
-      sessionText.innerHTML = "The Session is Currently Active";
+      sessionText.innerHTML = "Faecbook Session is Currently Active";
       sessionStatus.style.backgroundColor = "#329832";
     } 
 });

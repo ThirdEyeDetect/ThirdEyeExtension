@@ -3,9 +3,15 @@
   "version": "0.6.1",
   "manifest_version": 2,
   "description": "Physical Insiders, Beware!",
+  
+  "icons": { "16": "images/thirdeye-16x16.png",
+             "32": "images/thirdeye-32x32.png",
+             "48": "images/thirdeye-48x48.png",
+             "96": "images/thirdeye-96x96.png",
+             "120": "images/thirdeye-120x120.png"},
 
   "browser_action": {
-        "default_icon": "images/icon.png",
+        "default_icon": "images/thirdeye-16x16.png",
         "default_popup": "popup/popup.html"
     },
     
