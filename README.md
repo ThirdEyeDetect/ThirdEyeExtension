@@ -1,49 +1,61 @@
-# Knock Knock
+# ThirdEye Extension
 
-Knock Knock is a Chrome Extension designed to scrape a user's Facebook activity to mine a user's activity on the site. The extension creates a log of events that take place in the context of the Facebook page and stores them in JSON format. The extension runs a persistent background script as well as a content script.
+Third Eye is a continous authenitcation system for Facebook on the Google Chrome web browser. It scrapes a user's Facebook activity directly of the browser to create a profile. Subsequent user Facebook activity is run in context of the generated profile. If observed activity deviates significantly expected behaviour, the user is notified through a pre-established secondary communication method such as email.
 User activity can be categorized in two groups, silent and non-silent behaviour. Silent behavior are actions that are invisible to others on Facebook, such as scrolling/viewing stories, reading messages, and browsing between various pages. Non-silent behavior are actions that are visible to others on Facebook such as liking a post, commenting on a picture or uploading status.
-Currently Knock Knock focuses on silent behaviour capture
 
 
 #### Supported Browsers
-Knock Knock uses the Chrome API and thus, **Google Chrome** is the only supported browser.
+ThirdEye uses the Chrome API and thus, **Google Chrome** is the only supported browser.
 
 #### Installation Instructions
 - Download the repository and unzip to the desired location (such as desktop).
 - Go to the settings page ![alt tag](https://github.com/arcaneiceman/KnockKnock/blob/master/ReadmeImages/unnamed.png) on Google Chrome (top right of the Chrome) and then select **Extensions** on the left hand side of the page.
 - Click on **Load Unpacked Extension** and navigate to where you have unzipped the repo
 - Select the main folder (KnockKnock-master) and press **Okay**.
-- The extension should now have been added to Chrome. Load/Reload a Facebook page and access the **console**. A message saying "Session Started" means that the extension is running and recording.
+- The extension should now have been added to Chrome and the options page will open automatically.
+- Enter your email in the form to create a secondary notification channel. Close the options page.
+ALERT! Ensure that you fill this information out. If you do not, Third Eye will have no way of informing you of anomalous activity.
+- You should receive an email by ThirdEye for a sucessful installation.
+- Third Eye extension is now active and listening for active Facebook tabs. It will automatically record actions performed on Facebook.
 
 #### Current Capabilities 
-Currently, Knock Knock can capture the following in the silent behaviour category:
+Currently, ThirdEye can capture the following in the silent behaviour category:
 - Scrolling Newsfeed for stories.
 - Clicking on a contact to bring up message box.
 - Clicking on notification jewel icon.
 - Clicking on message jewel icon.
 - Browsing between pages on Facebook.
 
+The following non-silent behaviour is captured:
+- Clicking on a story
+- Like
+- Comment
+- Post
+- Message
+
+
+
 ##### Anonymity
-Feature is temporarily disabled.
+This feature is on by default and encrypts all data sent to the server. Local log is also encrypted before stored but is decrypted apon download.
 
 <!-- ##### Further Development -->
 
 
-##### Using Knock Knock
-KnockKnock uses HTML FileSystem to maintain and manage its log locally as well as sending events to a remote server for collection and processing. KnockKnock currently uses HTTP but will soon migrate to HTTPS transmission.
+##### Using ThirdEye
+ThirdEye uses HTML FileSystem to maintain and manage its log locally as well as sending events to a remote server for collection and processing. ThirdEye currently uses HTTP but will soon migrate to HTTPS transmission.
 
 <!--##### Log Example-->
 
 
 ##### Popup UI
-Knock Knock features a basic UI providing a few statistics regarding the current session as well as controls such as activating/deactivating user anonymity and the ability to download the LogFile that Knock Knock has generated.
+ThirdEye features a basic UI providing a status of Facebook tabs currently detected by system, a link to options page and ability download your log.
 
-![alt tag](https://github.com/arcaneiceman/KnockKnock/blob/master/ReadmeImages/screenshot.png)
+<!--![alt tag](https://github.com/arcaneiceman/KnockKnock/blob/master/ReadmeImages/screenshot.png)-->
 
 
 ##### Version 
-0.1.1
+0.6.7
 
 #### Language
-Knock Knock is written  in JavaScript and depends on Chrome browser APIs.
+ThirdEye is written  in JavaScript and depends on Chrome browser APIs.
 
