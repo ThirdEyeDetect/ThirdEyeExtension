@@ -1,6 +1,6 @@
 # ThirdEye browser extension
 
-Third Eye is a continuous authentication system for Facebook on the Google Chrome web browser. It scrapes a user's Facebook activity directly of the browser to create a profile. Subsequent user Facebook activity is run in context of the generated profile. If observed activity deviates significantly expected behavior, the user is notified through a pre-established secondary communication method such as email.
+ThirdEye is a continuous authentication system for Facebook on the Google Chrome web browser. It scrapes a user's Facebook activity directly of the browser to create a profile. Subsequent user Facebook activity is run in context of the generated profile. If observed activity deviates significantly expected behavior, the user is notified through a pre-established secondary communication method such as email.
 User activity can be categorized in two groups, silent and non-silent behavior. Silent behavior are actions that are invisible to others on Facebook, such as scrolling/viewing stories, reading messages, and browsing between various pages. Non-silent behavior are actions that are visible to others on Facebook such as liking a post, commenting on a picture or uploading status.
 
 
