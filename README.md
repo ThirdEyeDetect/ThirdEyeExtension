@@ -1,9 +1,7 @@
 # Knock Knock
 
-Knock Knock is a Chrome Extension designed to scrape a user's Facebook activity to mine a user's activity on the site. The extension creates a log of events that take place in the context of the Facebook page and stores them in JSON format. The extension runs a persistent background script as well as a content script.
+ThirdEye is a Chrome Extension designed to scrape a user's Facebook activity to mine a user's activity on the site. The extension creates a log of events that take place in the context of the Facebook page and stores them in JSON format. The extension runs a persistent background script as well as a content script.
 User activity can be categorized in two groups, silent and non-silent behaviour. Silent behavior are actions that are invisible to others on Facebook, such as scrolling/viewing stories, reading messages, and browsing between various pages. Non-silent behavior are actions that are visible to others on Facebook such as liking a post, commenting on a picture or uploading status.
-Currently Knock Knock focuses on silent behaviour capture
-
 
 #### Supported Browsers
 Knock Knock uses the Chrome API and thus, **Google Chrome** is the only supported browser.

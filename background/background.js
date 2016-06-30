@@ -10,8 +10,7 @@ var tabsOpened = 0;
 var clientKey = "";
 var clientID = "";
 var flushFunctionId = 0;
-var anonButtonStatus = true;
-
+var collectUserData = false;
 var emailSendFunctionId = 0;
 var email = "-Not Set Yet-";
 
@@ -22,25 +21,20 @@ var temporaryLog = "";
 /*
   When Extension is activated (for the first time)
   Load popup.js
-  Generate client key and client ID
+  Generate client ID
 */
 $(document).ready(function() {
-  var get_clientKey_Callback = function(return_value){ 
-    clientKey = isEmpty(return_value) ? randomString(16) : return_value['clientKey'];
-    chrome.storage.sync.set({'clientKey': clientKey});
-  };
-  chrome.storage.sync.get('clientKey', get_clientKey_Callback);
-  
+
   var get_clientID_Callback = function(return_value){ 
     clientID = isEmpty(return_value) ? guid() : return_value['clientID'];
     chrome.storage.sync.set({'clientID': clientID});
-    chrome.runtime.setUninstallURL("http://knock.nss.cs.ubc.ca:5000/uninstall?id="+clientID);
+    //chrome.runtime.setUninstallURL("http://knock.nss.cs.ubc.ca:5000/uninstall?id="+clientID);
   };
   chrome.storage.sync.get('clientID', get_clientID_Callback);
   
   var get_installed_Callback = function(return_value){
     if(isEmpty(return_value)){
-      chrome.tabs.create({ url: "../optionpage/options.html" });
+      //chrome.tabs.create({ url: "../optionpage/options.html" });
       chrome.storage.sync.set({'installed': "TRUE"});
     }
   };
@@ -63,12 +57,11 @@ chrome.extension.onMessage.addListener(function(request, sender){
   /* TODO ADD SPACE */
   if(endsWith(sender.url,"popup.html")){
     if(incomingMessage['Action']=="RequestUIUpdate"){
-      var updateObject = {"ClientKey": clientKey, "Space" : 0, "Recepient": "popup", "Status" : (tabsOpened>0), "AnonButton":anonButtonStatus}; 
+      var updateObject = {"Space" : 0, "Recepient": "popup", "Status" : (tabsOpened>0), "CollectUserDataButton":collectUserData}; 
       chrome.extension.sendMessage({message: JSON.stringify(updateObject)});
     }
-    else if (incomingMessage['Action']=="AnonButton"){
-      anonButtonStatus = incomingMessage['Status'];
-      console.log(incomingMessage['Status']);
+    else if (incomingMessage['Action']=="CollectUserDataButton"){
+      collectUserData = incomingMessage['Status'];
     }
     return;
   }
@@ -109,11 +102,15 @@ chrome.extension.onMessage.addListener(function(request, sender){
   /* Updating Stats in stats.js */
   UpdateStats(incomingMessage);
   
-  /* Placing in Temporary Event Array Pending Network Transfer */
+  /* Add Session key to event */
   incomingMessage['SessionKey'] = sessionKey;
-  if(anonButtonStatus){
-    AnonymizeContent(incomingMessage,clientKey);
+  
+  /* If we are not collecting user data, we dump the content */
+  if(!collectUserData){
+    incomingMessage['Content'] = "";
   }
+  
+  /* Placing in Temporary Event Array Pending Network Transfer */
   temporaryEventHolder.push(incomingMessage);
 });
 
@@ -155,17 +152,19 @@ function FlushToNetworkAndLog(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
-      console.dir('Post Success... Writing to Local Log...');
-      writeToFile();
+      //console.dir('Post Success... Writing to Local Log...');
+      //writeToFile();
+      temporaryEventHolder.length = 0;
       console.dir('Success!');
     }
   };
-  xhttp.open("POST", "http://knock.nss.cs.ubc.ca:5000/submit", true);
+  xhttp.open("POST", "https://knock.nss.cs.ubc.ca:5000/submit", true);
   xhttp.setRequestHeader("Content-type", "application/json");
   var sendVar = {
     'ClientID' : clientID,
     'Events' : temporaryEventHolder
   };
+
   xhttp.send(JSON.stringify(sendVar));
 }
 
@@ -173,7 +172,7 @@ function SendEmailToServer(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
   if (xhttp.readyState == 4 && xhttp.status == 200) {clearInterval(emailSendFunctionId);}};
-  xhttp.open("POST", "http://knock.nss.cs.ubc.ca:5000/email", true);
+  xhttp.open("POST", "https://knock.nss.cs.ubc.ca:5000/email", true);
   xhttp.setRequestHeader("Content-type", "application/json");
   var sendVar = {
     'ClientID' : clientID,
@@ -205,8 +204,7 @@ function wToFile(fs) {
       fileWriter.seek(fileWriter.length);
       
       fileWriter.onwriteend = function(e) {
-        /* File Write Complete... Emptying Array */
-        temporaryEventHolder.length = 0;
+        /* File Write Complete... */
       };
 
       fileWriter.onerror = function(e) {

@@ -3,9 +3,8 @@ This Script controls the UI page and has functions that can be called by the con
 */ 
 var sessionStatus;
 var sessionText;
-var clientKey;
 var currentSwitchState;
-var anonSwitch;
+var collectUserDataSwitch;
 var downloadLogButton;
 var optionsButton;
 
@@ -24,10 +23,10 @@ $(document).ready(function() {
     chrome.extension.sendMessage({message: b});
     sessionStatus = document.getElementById("circle");
     sessionText = document.getElementById("session_text");
-    anonSwitch = document.getElementById("anon");
+    collectUserDataSwitch = document.getElementById("collectuserdata");
     downloadLogButton = document.getElementById("dloadbutton");
     optionsButton = document.getElementById("options");
-    anonSwitch.onclick = toggleSwitch;
+    collectUserDataSwitch.onclick = toggleCollectUserDataSwitch;
     downloadLogButton.onclick = downloadLog;
     optionsButton.onclick = optionsClick;
 });
@@ -47,13 +46,12 @@ chrome.runtime.onMessage.addListener(
     var messageReceived = JSON.parse(request.message);
     if(!isMyMessage(messageReceived,"popup")){return;}
     console.log(messageReceived);
-    clientKey=messageReceived['ClientKey'];
-    currentSwitchState=messageReceived['AnonButton'];
+    currentSwitchState=messageReceived['CollectUserDataButton'];
     if(currentSwitchState){
-      var toggleVar = anonSwitch.onclick;
-      anonSwitch.onclick= null;
-      anonSwitch.click();
-      anonSwitch.onclick = toggleVar;
+      var toggleVar = collectUserDataSwitch.onclick;
+      collectUserDataSwitch.onclick= null;
+      collectUserDataSwitch.click();
+      collectUserDataSwitch.onclick = toggleVar;
     }
     if(messageReceived['Status']){
       sessionText.innerHTML = "Faecbook Session is Currently Active";
@@ -74,8 +72,8 @@ function downloadLog(){
 }
 
 /* This Method Toggles The Switch */
-function toggleSwitch(){
-  var mMessage = {"Recepient" : "background", "Action" : "AnonButton"};
+function toggleCollectUserDataSwitch(){
+  var mMessage = {"Recepient" : "background", "Action" : "CollectUserDataButton"};
   if(currentSwitchState === true){
     mMessage['Status']= false;
     currentSwitchState = false;
@@ -85,6 +83,7 @@ function toggleSwitch(){
     currentSwitchState = true;
   }
   var b = JSON.stringify(mMessage);
+  console.log(b)
   chrome.extension.sendMessage({message: b});
 }
 
@@ -116,7 +115,6 @@ function ReadAndDownload(fs){
          for(var i=0; i<arrOfEntries.length; i++){
            var entry;
            try{entry = JSON.parse(arrOfEntries[i]);}catch(err){continue;}
-           DeAnonymizeContent(entry,clientKey);
            data.push(entry);
          }
          

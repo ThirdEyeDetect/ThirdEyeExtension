@@ -33,9 +33,6 @@
 
   "background": {
         "scripts": ["lib/jquery-2.2.0.js",
-                    "lib/crypto/rollups/aes.js",
-                    "lib/crypto/rollups/sha3.js",
-                    "lib/anonymize.js",
                     "lib/common-functions.js", 
                     "background/stats.js",
                     "background/background.js"],
@@ -43,7 +40,7 @@
     },
 
   "permissions": [
-          "http://knock.nss.cs.ubc.ca/",
+          "https://knock.nss.cs.ubc.ca/",
           "tabs",
           "storage",
           "unlimitedStorage"

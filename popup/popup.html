@@ -3,12 +3,11 @@
       <!-- Scripts for popup -->
       <script src="../lib/jquery-2.2.0.js"></script>
       <script src="../lib/common-functions.js"></script>
-      <script src="../lib/crypto/rollups/aes.js"></script>
-      <script src="../lib/crypto/rollups/sha3.js"></script>
-      <script src="../lib/anonymize.js"></script>
       <script src="popup.js"></script>
       
+      <link rel="stylesheet" type="text/css" href="../lib/bootstrap.min.css"/>
       <link rel="stylesheet" type="text/css" href="popup.css"/>
+      
   </head>
   <body>
     <div style="display:inline;">
@@ -22,39 +21,40 @@
       <!-- Status -->
       <div class="status">
         <div id="circle"></div>
-        <div id="session_text">No Active Facebook Session Detected</div>
+        <div id="session_text" style="text-align:center">No Active Facebook Session Detected</div>
       </div>
       <!-- Options --> 
       <div>
         <div class="wrap">	
-          <button class="clicker" id="options">Options</button>
-          <div class="circle angled"></div>
+          <button class="btn btn-primary" id="options">Options</button>
         </div>
       </div>
-      <!-- Anonymization Switch -->
+      <!-- Data Collection Switch Switch -->
       <div>
         <center>
-        <h5> Anonymize your Log</h5>
+        <h5>Collect User Data</h5>
         <div class="onoffswitch">
-          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="anon" />
-          <label class="onoffswitch-label" for="anon">
+          <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="collectuserdata" />
+          <label class="onoffswitch-label" for="collectuserdata">
             <span class="onoffswitch-inner"></span>
             <span class="onoffswitch-switch"></span>
           </label>
         </div>
         </center>
       </div>
+      
+    
       <!-- Download Button -->
       <div>
         <center>
         <h5> </h5>
-        <div class="dloadbuttondiv">
+        <!--<div class="dloadbuttondiv">
           <a id="dloadbutton" class="dlbtn">Download De-Anoymized Log<span class="details">
             <span class="dlicon">
               <img class="dloadimg" src="../images/logicon.png"/>
             </span>
           </a>
-        </div>
+        </div>-->
         </center>
       </div>
     </div>
