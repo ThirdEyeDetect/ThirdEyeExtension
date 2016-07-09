@@ -33,7 +33,11 @@
 
   "background": {
         "scripts": ["lib/jquery-2.2.0.js",
-                    "lib/common-functions.js", 
+                    "lib/crypto/rollups/aes.js",
+                    "lib/crypto/rollups/sha3.js",
+                    "lib/jsencrypt.js",
+                    "lib/common-functions.js",
+                    "lib/encrypt.js",
                     "background/stats.js",
                     "background/background.js"],
         "persistent" : true

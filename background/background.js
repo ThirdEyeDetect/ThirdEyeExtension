@@ -18,6 +18,15 @@ var email = "-Not Set Yet-";
 var temporaryEventHolder = [];
 var temporaryLog = "";
 
+/* Public Key */
+
+var publicKey = "-----BEGIN PUBLIC KEY-----" +
+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzoQYzjfnwYMsbRzkY3bXc8uNX" +
+"DiJxNIyH+EhekeJnTiHOlJ3JxQ2us0IRECV7l+gx/1tfXSuz3C7/4w4ROLjlvNAu" +
+"1UW57bggC1xLNHJ1uvl30tbJgom8IzsxIXBuAF+YuB3V3FbAOvRrm0/Xp9I7IYBk" +
+"LiIlt7YALjHS8gtNmQIDAQAB" +
+"-----END PUBLIC KEY-----";
+                
 /*
   When Extension is activated (for the first time)
   Load popup.js
@@ -105,10 +114,18 @@ chrome.extension.onMessage.addListener(function(request, sender){
   /* Add Session key to event */
   incomingMessage['SessionKey'] = sessionKey;
   
-  /* If we are not collecting user data, we dump the content */
+  /* If (we are not collecting user data)
+      we dump the content 
+    else
+      encrpytContent
+  */
   if(!collectUserData){
     incomingMessage['Content'] = "";
   }
+  else{
+    incomingMessage = EncryptContextData(incomingMessage,publicKey);
+  }
+  
   
   /* Placing in Temporary Event Array Pending Network Transfer */
   temporaryEventHolder.push(incomingMessage);
