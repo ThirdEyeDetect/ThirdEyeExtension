@@ -9,7 +9,6 @@ var sessionKey = "none";
 var tabsOpened = 0;
 var clientKey = "";
 var clientID = "";
-var flushFunctionId = 0;
 var collectUserData = false;
 var emailSendFunctionId = 0;
 var email = "-Not Set Yet-";
@@ -31,6 +30,7 @@ var publicKey = "-----BEGIN PUBLIC KEY-----" +
   When Extension is activated (for the first time)
   Load popup.js
   Generate client ID
+  Start the interval to call Server
 */
 $(document).ready(function() {
 
@@ -48,7 +48,7 @@ $(document).ready(function() {
     }
   };
   chrome.storage.sync.get('installed', get_installed_Callback);
-  
+  setInterval(FlushToNetworkAndLog, 1000*10);
   //console.log("Client Key is " + clientKey);
 });
 
@@ -142,7 +142,7 @@ CreateNewSession():
 function CreateNewSession(){
   console.log("Starting New Session");
   sessionKey = guid();
-  flushFunctionId = setInterval(FlushToNetworkAndLog, 1000*5);
+  
 }
 
 /*
@@ -155,7 +155,6 @@ function KillSession(){
   console.log("Ending Session");
   tabsOpened = 0;
   resetStats();
-  clearInterval(flushFunctionId);
 }
 
 /* Flush to Network and Local Log */
