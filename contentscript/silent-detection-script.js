@@ -43,32 +43,35 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     return;
   }
   // TRIGGERING EVENT //
-  CreatePageVisitEvent(messageReceived["URL"]);
+  CreatePageVisitEvent(messageReceived['URL']);
+  
 
   //Page Reset?
-  var nextID = 1;
+  nextID = 1;
+  prev_message_count = 0;
   current_session_stories = {};
-  current_session_messages= {};
+  
+  //
+  if(messageReceived['URL'].includes('https://www.facebook.com/messages/')){
+    setInterval(checkMessagesOnPage,5000);
+  }
 });
 
 /* ------- Story Views ------- */
 
 var nextID = 1;
 var current_session_stories = {};
-var current_session_messages= {};
 
 $(function() {
   $('.userContentWrapper').appear();
-  //$('.direction_ltr').appear();
-  
-  
   $(document.body).on('appear', '.userContentWrapper', function(e, $affected) {
     // this code is executed for each appeared element
     $affected.each(function() {
       
       if( hash(this) in current_session_stories){
         //Already in Array, Ignore
-      } else {
+      } 
+      else {
         //Not Already in. Need to Add
         try{
           var story_details = getStoryDetails(this);
@@ -84,55 +87,9 @@ $(function() {
         catch(err){
           console.log(err);
         }
-        /*var story_details = getStoryDetails(this);
-        var actorArray = [];
-        var timestamp = "none";
-        var spons = false;
-        //console.dir(this);
-        try{
-          //Get Story Actors
-          var rawArray =  $(this).find('.fwb');
-          if(rawArray.length !== 0){
-            for(var i=0; i<rawArray.length; i++){
-              actorArray.push(rawArray[i].innerText);
-            }
-          }
-                    
-          //Get Story Timestamp
-          var rawTime = $(this).find('.timestamp');
-          if(rawTime.length !== 0){
-            timestamp = rawTime[0].getAttribute('title');
-            //console.log(timestamp);
-          }
-          
-          //Get Story Sponsored
-          var rawSpons = $(this).find('.uiStreamSponsoredLink');
-          if(rawSpons.length !== 0){
-              spons = true;
-          }
-          
-        }catch(err){
-          console.log("Could Not Capture Story");
-        }
-        current_session_stories.push(hash(this));
-        CreateStoryViewEvent(actorArray,spons,timestamp);*/
       }
     });
   });
-  
-  /*$(document.body).on('appear', '.direction_ltr', function(e, $affected) {
-    // this code is executed for each appeared element
-    $affected.each(function() {
-      if( $.inArray(this, current_session_stories ) != -1){
-        //Already in Array, Ignore
-      } else {
-        //Not Already in. Need to Add
-        current_session_messages.push(this);
-        console.log("Message appeared");
-      }
-    });
-  });*/
-
 });
 
 function getStoryDetails(target){
@@ -176,11 +133,88 @@ function hash(item){
    return item.hashID;
 }
 
+/* Message Views on ChatBox*/
+
+var current_session_chatboxes = {};
+//Note : _5wd9 is the class for chat message in Facebook
+
+setInterval(checkMessages, 5000);
+
+function checkMessages(){
+  var chatBoxes = $(document).find('.fbDockChatTabFlyout');
+  for(var i = 0; i<chatBoxes.length; i++){
+    var name = $(chatBoxes[i]).find('.titlebarText')[0];
+    name = $(name).attr('href');
+    if(name == null){continue;}
+    var messages = $(chatBoxes[i]).find('._4tdt');
+    var messagecount = messages.length;
+    //If this chatbox doesnt exist in global or if the message count is NOT same
+    if( !(name in current_session_chatboxes) || (messagecount != current_session_chatboxes[name]['count'])){
+      var obj = {
+        "count" : messagecount,
+        "content" : messages
+      };
+      current_session_chatboxes[name] = obj;
+      CreateMessageScrollEvent(name,messages);
+    }
+  }
+}
+
+
+/* Message Views on Message Page */
+ 
+var prev_message_count = 0; 
+function checkMessagesOnPage(){
+  var messages = $('.uiScrollableAreaContent').find('.webMessengerMessageGroup');
+  if(messages.length>prev_message_count){
+    prev_message_count = messages.length;
+    name = $('#webMessengerHeaderName').find('a')[0];
+    CreateMessageScrollEvent(name,messages);
+    for(var i = 0; i<messages.length; i++){
+      //details
+    }
+  }
+}
+
+// $(function(){
+//   $('._5wd9').appear();
+//   $(document.body).on('appear', '._5wd9', function(e, $affected){
+//     $affected.each(function(){
+//       console.log(this);
+//       // if( hash(this) in current_session_messages){
+//       //   //Already in Array, Ignore
+//       // } 
+//       // else {
+//       //   //Not Already in. Need to Add
+//       //   try{
+//       //     //var message_details = getStoryDetails(this);
+//       //     //if(!story_details){ throw "Could not capture Story";}
+//       //     //Added
+//       //     var message_details = $(this).find('._5yl5').innertext;
+//       //     current_session_messages[hash(this)] =  message_details;
+          
+//       //     if (Object.keys(current_session_messages).length > 6){
+//       //       //CreateStoryViewEvent(current_session_stories);
+//       //       console.log("Seen 6 messages");
+//       //       current_session_messages = {};
+//       //     }
+//       //   }
+//       //   catch(err){
+//       //     console.log(err);
+//       //   }
+//       // }
+//     });
+//   });
+// });
+
+
 /* ------- Story Clicks ------- */
-$(document).on('click', '.userContentWrapper', function(){
-  var story_details = getStoryDetails(this);
-  if(!story_details){ return;}
-  CreateStoryClickEvent(story_details['actorArray'],story_details['sponser'],story_details['timestamp']);
+$(document).on('mousedown', '.userContentWrapper', function(e){
+  if( e.which <= 2){
+    var story_details = getStoryDetails(this);
+    if(!story_details){ return;}
+    CreateStoryClickEvent(story_details['actorArray'],story_details['sponser'],story_details['timestamp']);
+  }
 });
 
 
@@ -202,7 +236,7 @@ notificationJewelButton.onmousedown = function(){
 };
 
 /* ------- Message Dropdown Click ------- */
-var messagesJewelButton = document.getElementById('u_0_f');
+var messagesJewelButton = document.getElementById('u_0_g');
 var messages_prevMouseEventListener = messagesJewelButton.onmousedown;
 messagesJewelButton.onmousedown = function(){
   console.log("Messages Clicked");
@@ -269,6 +303,24 @@ function CreateStoryClickEvent(actors,sponsored,timestamp){
 		  "Actors" : actors,
 		  "Sponsored" : sponsored,
 		  "timestamp" : timestamp
+	  }
+	};
+	var b = JSON.stringify(a);
+	console.log(b);
+	chrome.extension.sendMessage({message: b});
+}
+
+function CreateMessageScrollEvent(actor,detail){
+  var date = Date.now();
+  var a = {
+	  "Recepient" : "background",
+	  "Timestamp" : date,
+	  "TabID" : tabID,
+	  "ActionClass" : "Silent",
+		"ActionSubClass": "MessageScroll",
+	  "Content" : {
+		  "Actor" : actor,
+		  "Messages" : detail
 	  }
 	};
 	var b = JSON.stringify(a);
