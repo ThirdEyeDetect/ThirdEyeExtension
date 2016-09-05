@@ -3,6 +3,8 @@ File Structure :
 "lib/jquery-2.2.0.js", 
 "lib/common-functions.js",
 "lib/jquery.appear.js",
+"lib/crypto/rollups/sha1.js",
+"lib/crypto/components/enc-base64-min.js",
 "contentscript/global-variables.js",
 "contentscript/session-contentscript.js", 
 -->"contentscript/silent-detection-script.js", 
@@ -43,7 +45,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     return;
   }
   // TRIGGERING EVENT //
-  CreatePageVisitEvent(messageReceived['URL']);
+  CreatePageVisitEvent(CryptoJS.SHA1(messageReceived['URL']).toString(CryptoJS.enc.Base64));
   
 
   //Page Reset?
@@ -103,12 +105,12 @@ function getStoryDetails(target){
       var rawArray =  $(target).find('.fwb');
       if(rawArray.length !== 0){
         for(var i=0; i<rawArray.length; i++){
-          details['actorArray'].push(rawArray[i].innerText);
+          details['actorArray'].push(CryptoJS.SHA1(rawArray[i].innerText).toString(CryptoJS.enc.Base64));
         }
       }
                 
       //Get Story Timestamp
-      var rawTime = $(target).find('.timestamp');
+      var rawTime = $(target).find('.livetimestamp');
       if(rawTime.length !== 0){
         details['timestamp'] = rawTime[0].getAttribute('title');
         //console.log(timestamp);
@@ -149,13 +151,9 @@ function checkMessages(){
     var messages = $(chatBoxes[i]).find('._4tdt');
     var messagecount = messages.length;
     //If this chatbox doesnt exist in global or if the message count is NOT same
-    if( !(name in current_session_chatboxes) || (messagecount != current_session_chatboxes[name]['count'])){
-      var obj = {
-        "count" : messagecount,
-        "content" : messages
-      };
-      current_session_chatboxes[name] = obj;
-      CreateMessageScrollEvent(name,messages);
+    if( !(name in current_session_chatboxes) || (messagecount != current_session_chatboxes[name])){
+      current_session_chatboxes[name] = messagecount;
+      CreateMessageScrollEvent(CryptoJS.SHA1(name).toString(CryptoJS.enc.Base64),messagecount);
     }
   }
 }
@@ -169,7 +167,7 @@ function checkMessagesOnPage(){
   if(messages.length>prev_message_count){
     prev_message_count = messages.length;
     name = $('#webMessengerHeaderName').find('a')[0];
-    CreateMessageScrollEvent(name,messages);
+    CreateMessageScrollEvent(CryptoJS.SHA1(name).toString(CryptoJS.enc.Base64),prev_message_count);
     for(var i = 0; i<messages.length; i++){
       //details
     }
@@ -223,7 +221,7 @@ $(document).on('mousedown', '.userContentWrapper', function(e){
 $(document).on('click', '._42fz', function(){
 	console.log("Message Tab Clicked");
 	var name = $(this).find('._55lr');
-	CreateMessageBoxAccessEvent(name[0].innerText);
+	CreateMessageBoxAccessEvent((CryptoJS.SHA1(name[0].innerText).toString(CryptoJS.enc.Base64),prev_message_count));
 });
 
 /* ------- Notification Dropdown Button Click -------*/
@@ -310,7 +308,7 @@ function CreateStoryClickEvent(actors,sponsored,timestamp){
 	chrome.extension.sendMessage({message: b});
 }
 
-function CreateMessageScrollEvent(actor,detail){
+function CreateMessageScrollEvent(actor,messageCount){
   var date = Date.now();
   var a = {
 	  "Recepient" : "background",
@@ -320,7 +318,7 @@ function CreateMessageScrollEvent(actor,detail){
 		"ActionSubClass": "MessageScroll",
 	  "Content" : {
 		  "Actor" : actor,
-		  "Messages" : detail
+		  "MessageCount" : messageCount
 	  }
 	};
 	var b = JSON.stringify(a);
