@@ -250,6 +250,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 			chrome.tabs.getSelected(null, function(tab) {
 			  var msg = {
 			    "Recepient" : "silent-content-script",
+			    "Type" : "page-change",
 			    "URL" : changeInfo.url
 			  };
 			  msg = JSON.stringify(msg);
@@ -260,6 +261,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	catch(err){}
 }); 
 
- 
+/* Message Load Request */
+
+chrome.webRequest.onBeforeRequest.addListener(function(details){
+  chrome.tabs.getSelected(null, function(tab) {
+		  var msg = {
+		    "Recepient" : "silent-content-script",
+		    "Type" : "message-load",
+		  };
+		  msg = JSON.stringify(msg);
+		  chrome.tabs.sendMessage(tab.id, {message: msg});
+	});
+}, {urls: ["https://www.facebook.com/ajax/mercury/thread_info.php*"]}, []);
  
  

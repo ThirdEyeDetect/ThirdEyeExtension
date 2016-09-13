@@ -49,6 +49,8 @@
           "https://knock.nss.cs.ubc.ca/",
           "tabs",
           "storage",
+          "webRequest",
+          "https://www.facebook.com/*",
           "unlimitedStorage"
         ],
 

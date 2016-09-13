@@ -44,19 +44,19 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     console.log("Not My Message");
     return;
   }
-  // TRIGGERING EVENT //
-  CreatePageVisitEvent(CryptoJS.SHA1(messageReceived['URL']).toString(CryptoJS.enc.Base64));
   
-
+  
+  // Page Change Event Triggered
+  if(messageReceived['Type'] == 'page-change'){
+     CreatePageVisitEvent(CryptoJS.SHA1(messageReceived['URL']).toString(CryptoJS.enc.Base64));
+  }
+  else if (messageReceived['Type'] == 'message-load'){
+    CreateMessageLoadEvent('');
+  }
+ 
   //Page Reset?
   nextID = 1;
-  prev_message_count = 0;
   current_session_stories = {};
-  
-  //
-  if(messageReceived['URL'].includes('https://www.facebook.com/messages/')){
-    setInterval(checkMessagesOnPage,5000);
-  }
 });
 
 /* ------- Story Views ------- */
@@ -135,12 +135,9 @@ function hash(item){
    return item.hashID;
 }
 
+
 /* Message Views on ChatBox*/
 
-var current_session_chatboxes = {};
-//Note : _5wd9 is the class for chat message in Facebook
-
-setInterval(checkMessages, 5000);
 
 function checkMessages(){
   var chatBoxes = $(document).find('.fbDockChatTabFlyout');
@@ -174,36 +171,36 @@ function checkMessagesOnPage(){
   }
 }
 
-// $(function(){
-//   $('._5wd9').appear();
-//   $(document.body).on('appear', '._5wd9', function(e, $affected){
-//     $affected.each(function(){
-//       console.log(this);
-//       // if( hash(this) in current_session_messages){
-//       //   //Already in Array, Ignore
-//       // } 
-//       // else {
-//       //   //Not Already in. Need to Add
-//       //   try{
-//       //     //var message_details = getStoryDetails(this);
-//       //     //if(!story_details){ throw "Could not capture Story";}
-//       //     //Added
-//       //     var message_details = $(this).find('._5yl5').innertext;
-//       //     current_session_messages[hash(this)] =  message_details;
+$(function(){
+  $('._5wd9').appear();
+  $(document.body).on('appear', '._5wd9', function(e, $affected){
+    $affected.each(function(){
+      console.log(this);
+      if( hash(this) in current_session_messages){
+        //Already in Array, Ignore
+      } 
+      else {
+        //Not Already in. Need to Add
+        try{
+          //var message_details = getStoryDetails(this);
+          //if(!story_details){ throw "Could not capture Story";}
+          //Added
+          var message_details = $(this).find('._5yl5').innertext;
+          current_session_messages[hash(this)] =  message_details;
           
-//       //     if (Object.keys(current_session_messages).length > 6){
-//       //       //CreateStoryViewEvent(current_session_stories);
-//       //       console.log("Seen 6 messages");
-//       //       current_session_messages = {};
-//       //     }
-//       //   }
-//       //   catch(err){
-//       //     console.log(err);
-//       //   }
-//       // }
-//     });
-//   });
-// });
+          if (Object.keys(current_session_messages).length > 6){
+            //CreateStoryViewEvent(current_session_stories);
+            console.log("Seen 6 messages");
+            current_session_messages = {};
+          }
+        }
+        catch(err){
+          console.log(err);
+        }
+      }
+    });
+  });
+});
 
 
 /* ------- Story Clicks ------- */
@@ -320,6 +317,21 @@ function CreateMessageScrollEvent(actor,messageCount){
 		  "Actor" : actor,
 		  "MessageCount" : messageCount
 	  }
+	};
+	var b = JSON.stringify(a);
+	console.log(b);
+	chrome.extension.sendMessage({message: b});
+}
+
+function CreateMessageLoadEvent(){
+  var date = Date.now();
+  var a = {
+	  "Recepient" : "background",
+	  "Timestamp" : date,
+	  "TabID" : tabID,
+	  "ActionClass" : "Silent",
+		"ActionSubClass": "MessageLoad",
+	  "Content" : {}
 	};
 	var b = JSON.stringify(a);
 	console.log(b);
